@@ -9,7 +9,7 @@
 برای پیاده‌سازی اول یه interface برای محصول (Product) تعریف می‌کنیم. توی این پترن منظور از Product، آبجکت‌هایی هستن که از Factory Method برگردونده می‌شن. توی مثال ما می‌شن Notificationها:
 
 ```typescript
-interface Notification {
+interface SystemNotification {
   send(message: string): void;
 }
 ```
@@ -17,19 +17,19 @@ interface Notification {
 بعد کلاس‌های مختلف این interface رو پیاده‌سازی می‌کنن:
 
 ```typescript
-class EmailNotification implements Notification {
+class EmailNotification implements SystemNotification {
   send(message: string) {
     console.log(`Email: ${message}`);
   }
 }
 
-class SMSNotification implements Notification {
+class SMSNotification implements SystemNotification {
   send(message: string) {
     console.log(`SMS: ${message}`);
   }
 }
 
-class PushNotification implements Notification {
+class PushNotification implements SystemNotification {
   send(message: string) {
     console.log(`Push: ${message}`);
   }
@@ -40,7 +40,7 @@ class PushNotification implements Notification {
 
 ```typescript
 abstract class NotificationCreator {
-  abstract create(): Notification;
+  abstract create(): SystemNotification;
 
   send(message: string) {
     const notification = this.create();
@@ -55,19 +55,19 @@ abstract class NotificationCreator {
 
 ```typescript
 class EmailCreator extends NotificationCreator {
-  create(): Notification {
+  create(): SystemNotification {
     return new EmailNotification();
   }
 }
 
 class SMSCreator extends NotificationCreator {
-  create(): Notification {
+  create(): SystemNotification {
     return new SMSNotification();
   }
 }
 
 class PushCreator extends NotificationCreator {
-  create(): Notification {
+  create(): SystemNotification {
     return new PushNotification();
   }
 }
@@ -80,7 +80,7 @@ const creator: NotificationCreator = new EmailCreator();
 creator.send("Hello!");
 ```
 
-توی این مثال متد `send` نیازی نداره بدونه دقیقاً با چه نوع اعلانی کار می‌کنه. فقط با interface مشترک `Notification` سروکار داره و ساخت آبجکت به کلاس‌های Creator سپرده شده.
+توی این مثال متد `send` نیازی نداره بدونه دقیقاً با چه نوع اعلانی کار می‌کنه. فقط با interface مشترک `SystemNotification` سروکار داره و ساخت آبجکت به کلاس‌های Creator سپرده شده.
 
 دیاگرام UML این پترن هم می‌تونه به درک بهتر کمک کنه:
 
